@@ -4,7 +4,7 @@ A Knowledge Graph of Adult ADHD integrating the various medical resources: PubMe
 [![DOI](https://zenodo.org/badge/576685932.svg)](https://zenodo.org/badge/latestdoi/576685932)
 
 ---
-## Data and file structure
+## Data and ADHD-KG design
 
 Employing semantic web technologies, we build a knowledge graph that integrates several data sources to produce a well structured network of knowledge that allows explration of various aspects of adult ADHD. The following table lists the contents of each folder in the [repository](https://github.com/emmanuelpapadakis/ADHD-KG) and explains how they are reflected as knowledge resources in the ADHD-KG.
 
@@ -14,13 +14,28 @@ Employing semantic web technologies, we build a knowledge graph that integrates 
 | MeSH | [Medical Subject Headings](https://www.nlm.nih.gov/mesh/meshhome.html) | .nt | An extensive thesaurus of medical concepts. Triples are organized using Simple Knowledge Organization Standard (SKOS) to express hierarchical relation among concepts. |
 | PubMed | [PubMed Publications](https://pubmed.ncbi.nlm.nih.gov/) | .n3 | A set of 9537 publications in adult ADHD expressed as triples. Each resource is  detailed with basic information including title, authors, publishing venue and date, abstract, PubMed ID, digital object identifier and keywords |
 | SIDER | [Side Effect Resource](http://sideeffects.embl.de/) | .n3 | A collection of recorded adverse effects caused by marketed drugs. It includes 1430 drug entries expressed as RDF triples, which include information about naming of drugs, adverse reactions, their recorded frequency and classification, after [MeDdra](https://www.sciencedirect.com/science/article/abs/pii/S0378608009031602) |
-| SemanticAnnotations | Custom generated | .n3 | Links between free text and medical concepts|
-| DrugBank | DrugBank
+| DrugBank | [DrugBank](https://go.drugbank.com/) | .n3 | A detailed database of drug data that includes comprehesince drug target information. This database is converted into RDF representation containing 14594 drug entries reflecting the [DrugBank built-in schema](https://docs.drugbank.com/xml/#drugs). For each drug is associated with information such as naming, description, classification (e.g., stimulant), drug interactions and further chemical or pharmaceutical details.
+| SemanticAnnotations | Customly generated | .n3 | This data set is a product of the integration procedure, especially the semantic annotation of free medical text using [scispaCy](https://allenai.github.io/scispacy/). It contains links between free text found in titles and abstracts of PubMed publications and Clinical trials with medical concepts introduced in MeSH. |
 
+Semantic links are introduced to connect the datasets described in the Table above, resulting in the architectural design shown below:
+![architecturalDesign](https://user-images.githubusercontent.com/29025171/206930676-a9221290-e999-4ef6-bda1-7973b2010ee0.png)
 
-Several knowledge resources are combined together to compose the ADHD-KG. Each Folter in the repository represents one of those knowledge resources
+## How to set up the ADHD-KG
 
+A local instance of the ADHD-KG can be set through any data management system speclized in RDF data ([triplestore](https://en.wikipedia.org/wiki/Triplestore)). Our experiments were conducted using [GraphDB](https://www.ontotext.com/products/graphdb/) platform, which is a knowledge management system specialized in storing, representing and querying RDF data. Below, we provide a step by step guide on how to build a local copy of the ADHD-KG resource using GraphDB.
 
-## Setting up the Environment
+1. Download and Install GraphDB
+2. Import the contents of each folder in a named graph following the naming convention shown below, where $base$ stands for the base URL of the named graphs.
+
+| Folder name | Named Graph |
+| :---: | :---: |
+| CT | $base$/ctrials |
+| MeSH | $base$/mesh |
+| sider | $base$/sider |
+| DrugBank | $base$/dbcomplete |
+| PubMed | $base$/pubmed |
+| SemmanticAnnotations | $base$/semAn |
+
+3. Done! You can now issue queries using the SPARQL Endpoint
 
 ## Querying the Knowledge Graph
